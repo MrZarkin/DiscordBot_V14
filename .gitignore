@@ -260,3 +260,7 @@ paket-files/
 __pycache__/
 *.pyc
 /WebAppServer/Logs
+
+# Discord
+node_modules
+config.json
