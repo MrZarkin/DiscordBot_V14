@@ -31,11 +31,10 @@ module.exports =
             A la différence de bot.users.cache.get() qui va chercher un membre sur le serveur, donc un membre qu'il connait
             */
             let user = await bot.users.fetch(args._hoistedOptions[0].value);
-            if(!user) return message.reply('No member to ban!');
-
             let member = message.guild.members.cache.get(user.id);
-
             let reason = args.getString("reason");
+
+            if(!user) return message.reply('No member to ban!');
             if(!reason) reason = "No reason given";
 
             // Propriétaire / si c'est un membre et si il est bannable / Si membre et si il n'a pas de rang suérieur
@@ -48,16 +47,15 @@ module.exports =
 
             try
             {
-                await user.send(`You've been banned from the server ${message.guild.name} by ${message.user.tag}. Reason: \`${reason}\` `)
+                await user.send(`You've been banned from the server ${message.guild.name} by ${message.user.tag}. Reason: \`${reason}\`.`)
             }
             catch(err)
             {
                 message.reply("A problem has arisen. Please try again later!")
             }
 
-            await message.reply(`${message.user} has been banned for the reason: \`${reason}\` `);
+            await message.reply(`${message.user} has been banned for the reason: \`${reason}\`.`);
             await message.guild.bans.create(user.id, {reason: reason});
-
         }
         catch(err)
         {
