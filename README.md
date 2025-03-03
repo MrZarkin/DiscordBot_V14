@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-    <img src="https://img.shields.io/badge/Stable_Version-v1.1.1-2490D7.svg?style=for-the-badge" alt="Version"/>
+    <img src="https://img.shields.io/badge/Stable_Version-v1.1.2-2490D7.svg?style=for-the-badge" alt="Version"/>
     <a href="https://discord.com"><img src="https://img.shields.io/badge/Discord_Server-ADD-7289DA.svg?style=for-the-badge" alt="Discord"/></a>
     <a href=""><img src="https://img.shields.io/badge/LICENSE-GPL_2.0-43B02A.svg?style=for-the-badge" alt="License"/></a>
     <img src="https://img.shields.io/badge/npm-v14.18.0-43B02A.svg?style=for-the-badge" alt="DiscordJS"/>
