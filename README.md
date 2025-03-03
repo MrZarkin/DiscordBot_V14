@@ -1,4 +1,3 @@
-
 <p align="center">
     <img src="https://miro.medium.com/v2/resize:fit:1400/1*7P8znG0tW7qmpOpZmSxj7w.png" alt="Banner"/>
 </p>
@@ -21,20 +20,34 @@
 ## <img src="https://img.icons8.com/?size=100&id=83240&format=png&color=000000" width="23"> 》Features
 
 ### Server management
-* `/ban [user] {time m/h/d/mo/y} <reason>` -> Ban a server member. With User as a reference, and the reason (not mandatory). Exemple: /ban @MrZarkin 1d trashtalk
+
+#### General
+
+* `/ban [user] {time s/m/h/d/mo/y} <reason>` -> Ban a server member. With User as a reference, and the reason (not mandatory). Exemple: /ban @MrZarkin 1d trashtalk
 * `/unban [userID]` -> Unban a member from your server. Exemple: /unban 916639542285565953
 * `/kick [user] <reason>` -> Kick a server member, with User as a reference, and the reason (not mandatory). Exemple : /kick @MrZarkin trashtalk
+* `/nick [user] <NewNickname>` -> Select a user to change his nickname. NewNickname is optional, if its null, the nickname will be reset. Exemple: /nick @MrZarkin MZ
 
+#### Text
+
+* `/mute [user] {time s/m/h/d} <reason>` -> Timeout a person in the living rooms writes temporarily. Time must be under 28 days. Exemple: /mute @MrZarkin 20d A reason
+* `/unmute [user]` -> Untimeout a person in writing salons. Exemple: /unmute @MrZarkin
+
+#### Voice
+
+* `/vmute [user] {time s/m/h/d} <reason>` -> Mute a person in the voice chat. Time must be under 28 days. Exemple: /vmute @MrZarkin 20d A reason
+* `/unmute [user]` -> Unmute a person in vocal salons. Exemple: /unmute @MrZarkin
+* `/vkick [user]` -> Kick a server member from a voice channel. Exemple : /kick @MrZarkin
 
 ## <img src="https://img.icons8.com/?size=100&id=21866&format=png&color=006400" width="23"> 》Installation
 
-
 ### Resources
 
-- [Installing Node on Windows](https://nodejs.org/en)
-- [Visual Studio Code](https://code.visualstudio.com)
-- [discord.js](https://www.npmjs.com/package/discord.js)
-- [@discordjs/rest](https://www.npmjs.com/package/@discordjs/rest)
+- NodeJS. Get it from [Installing Node on Windows](https://nodejs.org/en)
+- VS Code. Get it from [Visual Studio Code](https://code.visualstudio.com)
+- Discord.js library. Get it from [discord.js](https://www.npmjs.com/package/discord.js)
+- REST from Discord.js library. Get it from [@discordjs/rest](https://www.npmjs.com/package/@discordjs/rest)
+- ms library. Get it from [ms](https://www.npmjs.com/package/ms)
 
 
 ### Setting Up
@@ -56,7 +69,7 @@ Finally, you must put in this file :
 ```
 You will replace `TOKEN`, `CLIENTID`, `CLIENTID_SECRET` in your [Discord Developer Portal](https://discord.com/developers/applications). Choose any application if you have one, otherwise create one. Go to the Bot tab, and choose 'RESET TOKET'. Copy it and put it in `config.json`.
 
-2. Once finished, open a new terminal and type the command: `npm i discord.js`, then `npm i @discordjs/rest` and finally `npm i fs`.
+2. Once finished, open a new terminal and type the command: `npm i discord.js`, `npm i @discordjs/rest`, then `npm i fs` and finally `npm i ms`.
 
 3. All that's left to do is launch the bot by typing `node start`. ( Make sure you've set the right path: `cd .\src\`.
 

@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 
 module.exports = async (bot, message) => {
 
+    // Permet d'utiliser les commandes sans utiliser l'option /
     let prefix = "!";
 
     let messageArray = message.content.split(" ");
