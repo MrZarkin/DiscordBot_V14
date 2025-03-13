@@ -1,13 +1,12 @@
 // Importer les librairies
-const { PermissionFlagsBits } = require('discord.js');
-const { MessageFlags } = require('discord.js');
+const { PermissionFlagsBits, MessageFlags } = require('discord.js');
 
 // Exporter l'tuilisation de la commande pour l'utiliser dans un require()
 module.exports = 
 {
     // Information n�cessaire � la commande
     name: "kick",
-    description: "Kick a member",
+    description: "Kicks a member.",
     permission: PermissionFlagsBits.KickMembers,
     dm: false,
     options:
@@ -15,15 +14,15 @@ module.exports =
         // Option de la commande. Ex: /ban option1 option2 option3
         {
             type: "user",
-            name: "member",
-            description: "The member to kick",
+            name: "user",
+            description: "The user to kick.",
             required: true,
             autocomplete: false
         },
         {
             type: "string",
             name: "reason",
-            description: "The reason for the kick",
+            description: "Reason for the kick.",
             required: false,
             autocomplete: false
         }
@@ -41,36 +40,32 @@ module.exports =
             R�cup�rer la valeur des param�tres
             */
 
-            let user = args.getUser("member");
-            let member = message.guild.members.cache.get(user.id);
+            const user = args.getUser("user");
+            const member = message.guild.members.cache.get(user.id);
             let reason = args.getString("reason");
 
             if (!user || !member)
                 // ephemeral = true, permet de r�pondre un message visible seulement par l'auteur de la commande
                 return message.reply({ content: 'No member to ban!', flags: MessageFlags.Ephemeral });
 
-            if (!reason)
-                reason = "No reason given";
-
-            // Si l'auteur du message = l'utilisateur cibl� / Si proprio du serveur / si c'est un membre et si il n'est pas kickable / Si membre et si il a un rang sup�rieur
-            if ((message.user.id === user.id)
-                || (await message.guild.fetchOwner().id === user.id)
-                || (member && !member.kickable)
-                || (member && message.member.roles.highest.comparePositionTo(member.roles.highest) <= 0))
+            if ((message.user.id === user.id) // Si auteur du message = utilisateur choisi
+                || (await message.guild.fetchOwner().id === user.id) // // Si proprio du serveur = utilisateur ciblé
+                || (member && !member.kickable) // Si ce membre est bien sur le serveur et peut être kick
+                || (member && message.member.roles.highest.comparePositionTo(member.roles.highest) <= 0)) // // Si ce membre est bien sur le serveur et si il a un rang supérieur
             {
                 return message.reply({ content: "I can't kick this member!", flags: MessageFlags.Ephemeral });
             }
 
-            await message.reply({ content: `${user} has been kicked from this server!`, flags: MessageFlags.Ephemeral });
+            await message.reply({ content: `${user} has been kicked from this server for the reason: \`${reason == null ? "No reason given" : reason}\`.`, flags: MessageFlags.Ephemeral });
 
             // Kick le membre avec la raison
-            await member.kick(reason);
+            await member.kick(reason == null ? null : reason);
         }
         catch (err)
         {
             // En cas de probl�me
             console.log(err);
-            message.reply({ content: "A problem has arisen. Please try again later or try the command `/kick [user] <reason>`!", flags: MessageFlags.Ephemeral });
+            message.reply({ content: "A problem has arisen. Please try again later or try the command `/kick [user] <reason ?>`!", flags: MessageFlags.Ephemeral });
         }
     }
 }

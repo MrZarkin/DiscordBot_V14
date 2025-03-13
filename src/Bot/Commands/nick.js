@@ -1,13 +1,12 @@
 // Importer les librairies
-const { PermissionFlagsBits } = require('discord.js');
-const { MessageFlags } = require('discord.js');
+const { PermissionFlagsBits, MessageFlags} = require('discord.js');
 
 // Exporter l'tuilisation de la commande pour l'utiliser dans un require()
 module.exports = 
 {
     // Information n�cessaire � la commande
     name: "nick",
-    description: "Change nickname of a member",
+    description: "Changes the nickname of a member.",
     permission: PermissionFlagsBits.ManageNicknames,
     dm: false,
     options:
@@ -15,15 +14,15 @@ module.exports =
         // Option de la commande. Ex: /ban option1 option2 option3
         {
             type: "user",
-            name: "member",
-            description: "Change the nickname of a member",
+            name: "user",
+            description: "User to set nick for.",
             required: true,
             autocomplete: false
         },
         {
             type: "string",
-            name: "nickname",
-            description: "Choose your nickname",
+            name: "new_nick",
+            description: "The new nickname.",
             required: false,
             autocomplete: false
         }
@@ -31,8 +30,6 @@ module.exports =
 
     async run(bot, message, args)
     {
-        // ERREUR : IMPOSSIBLE DE CHANGER LE NOM DU PROPIETAIRE DU SERVEUR CAR SON RANG >= CELUI DU BOT
-
         try
         {
             /*
@@ -43,25 +40,21 @@ module.exports =
             R�cup�rer la valeur des param�tres
             */
 
-            let user = await bot.users.fetch(args._hoistedOptions[0].value);
-            let member = message.guild.members.cache.get(user.id);
-            let name = args.getString("nickname");
+            const user = await bot.users.fetch(args.getUser("user"));
+            const member = message.guild.members.cache.get(user.id);
+            const name = args.getString("new_nick");
 
             if (!name)
             {
                 await message.reply({ content: `The nickname of ${user} on this server has been reset !`, flags: MessageFlags.Ephemeral });
-                return member.setNickname(null); // null pour enlever
+                return member.setNickname(null); // null pour reset le surnom
             }
 
-            if ((message.member.roles.highest.comparePositionTo(member.roles.highest) <= 0)
-                || (!member.moderatable))
+            if ((message.member.roles.highest.comparePositionTo(member.roles.highest) <= 0) // Si ce membre est bien sur le serveur et si il a un rang supérieur
+                || (!member.moderatable)) // Si le membre n'est pas modérable 
             {
                 return message.reply({ content: "You can't change his nickname!", flags: MessageFlags.Ephemeral })
             }
-
-            if (!user)
-                // ephemeral = true -> r�pondre un message visible seulement par l'auteur de la commande
-                return message.reply({ content: 'No member!', flags: MessageFlags.Ephemeral });
 
             // Changer le surnom
             await member.setNickname(name);
@@ -72,7 +65,7 @@ module.exports =
         {
             // En cas de probl�me
             console.log(err);
-            message.reply({ content: "A problem has arisen. Please try again later or try the command `/nick [user] <NewNickname>`!", flags: MessageFlags.Ephemeral });
+            message.reply({ content: "A problem has arisen. Please try again later or try the command `/nick [user] <New_Nickname ?>`!", flags: MessageFlags.Ephemeral });
         }
     }
 }
