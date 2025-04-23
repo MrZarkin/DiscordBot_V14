@@ -1,15 +1,16 @@
-// Importation des �l�ments n�cessaire
-const { PermissionFlagsBits, MessageFlags, SlashCommandBuilder, ChannelType } = require('discord.js');
+// Importation des librairies nécessaire
+const { PermissionFlagsBits, MessageFlags, SlashCommandBuilder, ChannelType, Colors } = require('discord.js');
+const createEmbed = require('../scripts/createEmbed');
 const ms = require('ms');
 
 // Exportation du code
 module.exports = {
 
-    // Information n�cessaire � la commande
+    // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
             .setName('mute')
-            .setDescription('Mute a member from text channels so they cannot type.')
+            .setDescription('The member to be muted.')
             .addStringOption(option => 
                 option
                     .setName('type')
@@ -22,8 +23,8 @@ module.exports = {
                 )
             .addUserOption(option =>
                 option
-                    .setName('user')
-                    .setDescription('User to mute.')
+                    .setName('member')
+                    .setDescription('Member to mute.')
                     .setRequired(true)
                 )
             .addStringOption(option =>
@@ -43,30 +44,41 @@ module.exports = {
     async execute(interaction)
     {
         // Récupérer la valeur des paramètres
-        const user = interaction.options.getUser("user");
+        const user = interaction.options.getUser("member");
         const member = interaction.guild.members.cache.get(user.id);
         const role = interaction.guild.roles.cache.find(role => role.name === "Muted");
         const type = interaction.options.getString('type');
-        let time = interaction.options.getString("time") ?? null;
-        let reason = interaction.options.getString("reason") ?? null;
+        let time = interaction.options.getString("time");
+        let reason = interaction.options.getString("reason") || 'No reason provided';
 
         if(time != null && isNaN(ms(time)))
             // Si on convertie time en milliseconde et que c'est pas un nombre ...
             return interaction.reply({
-                content: "This type of duration is not recognized! Try the command `/mute <type Text/Voice> [user] {time m/h/d ?} <reason ?>`",
+                content: `❌ **${user.displayName}** cannot be muted! The duration The time given is not correct!`,
                 flags: MessageFlags.Ephemeral
             });
+
+        // Si le membre possède un rôle 'Muted'
+        if(member.roles.cache.some(role => role.name === 'Muted') || member.voice.mute == true)
+            return interaction.reply({
+                content: `❌ ${user.displayName} is already muted!`,
+                flags: MessageFlags.Ephemeral
+            });
+
+        if((interaction.user.id === user.id) // Si l'auteur du message = l'utilisateur ciblé
+        || (await interaction.guild.fetchOwner().id === user.id) // Si proprio du serveur = l'utilisateur ciblé
+        || (interaction.member.roles.highest.comparePositionTo(member.roles.highest) <= 0) // Si ce membre est bien sur le serveur et si il a un rang supérieur
+        || (member && !member.moderatable)) // Si le membre n'est pas modérable
+        {
+            return interaction.reply({
+                content: `❌ **${user.displayName}** cannot be muted! I have not permission to mute this user!`,
+                flags: MessageFlags.Ephemeral
+            });
+        }
 
         // En fonction du type de mute
         if(type === 'text')
         {
-            // Si le membre possède un rôle 'Muted'
-            if(member.roles.cache.some(role => role.name === 'Muted'))
-                return interaction.reply({
-                    content: "This member is already muted from text!`",
-                    flags: MessageFlags.Ephemeral
-                });
-
             if(!role)
             {
                 try
@@ -91,57 +103,56 @@ module.exports = {
                 }
             }
 
-            if((interaction.user.id === user.id) // Si l'auteur du message = l'utilisateur ciblé
-            || (await interaction.guild.fetchOwner().id === user.id) // Si proprio du serveur = l'utilisateur ciblé
-            || (interaction.member.roles.highest.comparePositionTo(member.roles.highest) <= 0) // Si ce membre est bien sur le serveur et si il a un rang supérieur
-            || (!member.moderatable)) // Si le membre n'est pas modérable
-            {
-                return interaction.reply({
-                    content: "I can't mute this member!",
-                    flags: MessageFlags.Ephemeral
-                });
-            }
-
             // Ajouter du rôle au membre
             await member.roles.add(interaction.guild.roles.cache.find(role => role.name === "Muted"), reason);
-
-            // Envoyer en message priv�
-            await interaction.reply({
-                content: `${user} muted from the text!`,
-                flags: MessageFlags.Ephemeral
-            });
         }
         else if(type === 'voice')
         {
-            // Si le membre est déjà mute
-            if(member.voice.mute == true)
-                return interaction.reply({
-                    content: "This member is already muted from voice!`",
-                    flags: MessageFlags.Ephemeral
-                });
-
-            // Si la personne cibl� c'est nous / Si il a un rang sup�rieur / Si peut pas �tre mod�r� / Si pas d�j� mute vocal / Si c'est membre
-            if ((interaction.user.id === user.id) // Si l'auteur du message = l'utilisateur ciblé
-                || (await interaction.guild.fetchOwner().id === user.id) // Si proprio du serveur = l'utilisateur ciblé
-                || (interaction.member.roles.highest.comparePositionTo(member.roles.highest) <= 0) // Si ce membre est bien sur le serveur et si il a un rang supérieur
-                || (!member.moderatable) // Si le membre n'est pas modérable
-                || (member.voice.channelId === null)) // Si le membre n'est pas dans un vocal
+            if (member.voice.channelId === null) // Si le membre n'est pas dans un vocal
             {
                 return interaction.reply({
-                    content: "I can't mute this member!",
+                    content: `❌ **${user.displayName}** cannot be muted! He isn't in a voice channel!`,
                     flags: MessageFlags.Ephemeral
                 });
             }
     
             // Supprimer le mute en vocal de l'utilisateur 
             await member.voice.setMute(true, reason);
-    
-            // ephemeral = true -> r�pondre un message visible seulement par l'auteur de la commande
-            await interaction.reply({
-                content: `${user} muted from the voice!`,
-                flags: MessageFlags.Ephemeral
+        }
+
+        let Embed;
+        if(time)
+        {
+            // Enregistre le temps et le bon format
+            const endTimestamp = new Date(Date.now() + ms(time)) // Utiliser ms() pour parser
+            const endDate = Math.floor(endTimestamp.getTime() / 1000);
+
+            // Création d'un embed de réponse
+            Embed = createEmbed({
+                title: '🔇 Mute',
+                color: Colors.DarkRed,
+                description: `**${user.displayName}** has been muted.`,
+                fields: [
+                    { name: '', value: `> Author: ${interaction.user}\n> Until: <t:${endDate}:f>\n> Reason: **${reason}**`},
+                ],
+                timestamp: true
             });
         }
+        else
+        {
+            // Création d'un embed de réponse
+            Embed = createEmbed({
+                title: '🔇 Mute',
+                color: Colors.DarkRed,
+                description: `**${user.displayName}** has been muted.`,
+                fields: [
+                    { name: '', value: `> Author: ${interaction.user}\n> Reason: **${reason}**`},
+                ],
+                timestamp: true
+            });
+        }
+
+        await interaction.reply({ embeds: [Embed] });
 
         // Enlever le mute à la fin du temps
         if(time != null)

@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-    <img src="https://img.shields.io/badge/Stable_Version-v1.1.4-2490D7.svg?style=for-the-badge" alt="Version"/>
+    <img src="https://img.shields.io/badge/Stable_Version-v1.1.5-2490D7.svg?style=for-the-badge" alt="Version"/>
     <a href="https://discord.com"><img src="https://img.shields.io/badge/Discord_Server-ADD-7289DA.svg?style=for-the-badge" alt="Discord"/></a>
     <a href=""><img src="https://img.shields.io/badge/LICENSE-GPL_2.0-43B02A.svg?style=for-the-badge" alt="License"/></a>
     <img src="https://img.shields.io/badge/npm-v14.18.0-43B02A.svg?style=for-the-badge" alt="DiscordJS"/>
@@ -19,25 +19,46 @@
 
 ## <img src="https://img.icons8.com/?size=100&id=83240&format=png&color=000000" width="23"> 》Features
 
-### Server management
+### Moderation
 
-* `/ban [user] {time m/h/d ?} <reason ?>` -> Bans a member.
-* `/clear {number_of_messages}` -> Cleans up channel messages.
-* `/kick [user] <reason ?>` -> Kicks a member.
-* `/lock [channel ?] <reason ?>` -> Disables @everyone from sending messages in specific channel.
+* `/ban <member> [reason] [duration]` -> Bans a member from the server.
+* `/clear <amount>` -> Cleans up channel messages.
+* `/kick <type> <member> [reason]` -> The member to be kicked from the server/voice channel.
+* `/lock [channel]` -> Lock a channel from sending messages.
+* `/mute <type> <member> [duration] [reason]` -> The member to be muted.
+* `/nickname <member> [nickname]` -> Changes the nickname of a member.
+* `/slowmode <type> [duration] [channel] [reason]` -> Enable/Disable slow mode.
+* `/unban <user>` -> Unbans a member.
+* `/unlock [channel]` -> Unlock a channel from sending messages.
+* `/unmute <type> <member>` -> The member to be unmuted.
+* `/warn <member> [reason]` -> Warns a member.
+* `/warnings <type> [member] [warnID]` -> Manage members warnings.
 * `/moveall [channel ?]` -> Move all members to the voice channel to which you are currently connected.
-* `/moveme [user]` -> Moves you to another voice channel.
 * `/moveuser [user] {channel ?}` -> Moves a member to another voice channel.
-* `/mute <type Text/Voice> [user] {time m/h/d ?} <reason ?>` -> Mute a member from text channels so they cannot type.
-* `/nick [user] <New_Nickname ?>` -> Changes the nickname of a member.
-* `/role [type Give/Remove] {user} <Role>` -> Gives/Removes a role to a user.
+* `/timeout <user> [time] [reason]` -> Timeout a user from sending messages, react or join voice channels.
+* `/untimeout <member>` -> Remove timeout from a user.
+
+### Information
+
+* `/bot` -> Shows bot informations.
+* `/channel [channel]` -> Show informations about a channel.
+* `/ping` -> Show the bot response time.
+* `/role <type> <user> <role>` -> Gives/Removes a role to a user.
 * `/roles` -> Get a list of server roles and member counts.
-* `/timeout [user] {time m/h/d < 21d ?} <reason ?>` -> Timeout a user from sending messages, react or join voice channels.
-* `/unban [user]` -> Unbans a member.
-* `/unmute <type Text/Voice> [user]` -> Unmutes a member from text/voice channels.
-* `/unlock [channel ?]` -> Allow @everyone to send messages in a specific channel.
-* `/untimeout [user]` -> Remove timeout from a user.
-* `/vkick [user]` -> Kicks a member from a voice channel.
+* `/server <type>` -> Shows server informations.
+* `/user <type> [member]` -> Shows bot informations.
+
+### Tickets
+
+> Incoming...
+
+### Leveling
+
+> Incoming...
+
+### Giveaways
+
+> Incoming...
 
 
 ## <img src="https://img.icons8.com/?size=100&id=21866&format=png&color=006400" width="23"> 》Installation
@@ -46,9 +67,13 @@
 
 - NodeJS. Get it from [Installing Node on Windows](https://nodejs.org/en)
 - VS Code. Get it from [Visual Studio Code](https://code.visualstudio.com)
+- XAMPP. Get it from [Xampp](https://www.apachefriends.org/fr/download.html), then run Apache and MySQL, and finally go to this [page](http://localhost/phpmyadmin/). NOTE: You need to create a new database named `DiscordBot`, with a `warns` table, with the columns `(guildID, userID, authorID, warnID, reason, date)`.
 - Discord.js library. Get it from [discord.js](https://www.npmjs.com/package/discord.js)
 - REST from Discord.js library. Get it from [@discordjs/rest](https://www.npmjs.com/package/@discordjs/rest)
 - ms library. Get it from [ms](https://www.npmjs.com/package/ms)
+- mysql library. Get it from [mysql](https://www.npmjs.com/package/mysql)
+- path library. Get it from [path](https://www.npmjs.com/package/path)
+- fs library. Get it from [fs](https://www.npmjs.com/package/fs)
 
 For a better understanding of the code, I recommend that you familiarize yourself with the Discord.js library on their [documentation](https://discord.js.org) and on their [guide](https://discordjs.guide/).
 

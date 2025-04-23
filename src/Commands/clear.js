@@ -1,19 +1,21 @@
-// Importation des �l�ments n�cessaire
+// Importation des librairies nécessaire
 const { PermissionFlagsBits, MessageFlags, SlashCommandBuilder } = require('discord.js');
 
 // Exportation du code
 module.exports = {
         
-    // Information n�cessaire � la commande
+    // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
             .setName('clear')
             .setDescription('Cleans up channel messages.')
             .addNumberOption(option =>
                 option
-                    .setName('number_of_messages')
+                    .setName('amount')
                     .setDescription('Number of messages to delete.')
                     .setRequired(true)
+                    .setMinValue(1)
+                    .setMaxValue(100)
                 )
             .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
     
@@ -21,14 +23,7 @@ module.exports = {
     {
         // Récupérer la valeur des paramètres
         const channel = interaction.channel;
-        const number = interaction.options.getNumber('number_of_messages');
-
-        // Si le nombre de message choisi est supérieur à 100 et inférieur à 0
-        if(parseInt(number) <= 0 || parseInt(number) > 100)
-            return interaction.reply({
-                content: "The number of messages must be in between `0` and `100`!",
-                flags: MessageFlags.Ephemeral
-            });
+        const number = interaction.options.getNumber('amount');
 
         // Le bot "répond", il "réfléchit" pendant qu'il fait l'action.
         await interaction.deferReply({ flags: MessageFlags.Ephemeral });
@@ -39,8 +34,8 @@ module.exports = {
             const messages = await channel.bulkDelete(parseInt(number), true);
 
             // Modifier le message en attente.
-            return interaction.followUp({
-                content: `\`${messages.size}\` messages has beed deleted in ${channel}!`,
+            await interaction.followUp({
+                content: `🧹 Sucess! \`${messages.size}\` messages were deleted in ${channel.name}!`,
                 flags: MessageFlags.Ephemeral
             });
         }
@@ -52,14 +47,14 @@ module.exports = {
             // Si auncun messages sont -14 jours et modifier le message en attente.
             if (messages.length <= 0)
                 return message.followUp({
-                    content: "No messages can be deleted because they are more than 14 days old!",
+                    content: "❌ No messages can be deleted because they are more than 14 days old!",
                     flags: MessageFlags.Ephemeral
                 });
 
             // Supprimer le nombre de message choisi et modifier le message en attente.
             await channel.bulkDelete(messages, true);
             return interaction.followUp({
-                content: `\`${messages.size}\` messages has beed deleted in ${channel}!`,
+                content: `🧹 Sucess! \`${messages.size}\` messages were deleted in ${channel.name}!`,
                 flags: MessageFlags.Ephemeral
             });
         }

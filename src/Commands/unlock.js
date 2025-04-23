@@ -1,38 +1,34 @@
-// Importation des �l�ments n�cessaire
+// Importation des librairies nécessaire
 const { PermissionFlagsBits, MessageFlags, SlashCommandBuilder, ChannelType } = require('discord.js');
 
 // Exportation du code
 module.exports = {
 
-    // Information n�cessaire � la commande
+    // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
             .setName('unlock')
-            .setDescription('Allow @everyone to send messages in a specific channel.')
+            .setDescription('Unlock a channel from sending messages.')
             .addChannelOption(option => 
                 option
                     .setName('channel')
                     .setDescription('Channel to unlock.')
                     .setRequired(false)
+                    .addChannelTypes(ChannelType.GuildText)
                 )
             .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
 
     async execute(interaction)
     {
         // Récupéré la valeurs des options
-        let channel = args.getChannel("channel") ?? interaction.channel;
-
-        if(channel.type !== ChannelType.GuildText
-            && channel.type !== ChannelType.PublicThread
-            && channel.type !== ChannelType.PrivateThread)
-        {
-            // Si le salon n'est pas du Text, ou un thread public ou privée
-            return interaction.reply('This isn\'t a good channel!');
-        }
+        let channel = interaction.options.getChannel("channel") || interaction.channel;
 
         if(channel.permissionOverwrites.cache.get(interaction.guild.roles.everyone.id)?.allow.toArray(false).includes("SendMessages"))
             // Si le salon en question a déjà rendu la possibilitée d'envoyer des messages impossible pour tout le monde
-            return interaction.reply(`The channel ${channel} is already unlocked!`);
+            return interaction.reply({
+                content: `❌ The channel is already unlocked!`,
+                flags: MessageFlags.Ephemeral
+            });
 
         if(channel.permissionOverwrites.cache.get(interaction.guild.roles.everyone.id))
             // Si le salon possède des permissions pour le rôle @everyone
@@ -43,6 +39,6 @@ module.exports = {
             await channel.permissionOverwrites.create(interaction.guild.roles.everyone.id, {SendMessages: true});
 
         // Répondre que le salon est désormé "bloqué"
-        await interaction.reply(`The channel ${channel} has been unlocked!`);
+        await interaction.reply(`🔓**${interaction.user.displayName}** unlocked the channel ${channel}!`);
     }
 }

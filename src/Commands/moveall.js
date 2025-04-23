@@ -1,10 +1,10 @@
-// Importation des �l�ments n�cessaire
+// Importation des éléments nécessaire
 const { PermissionFlagsBits, MessageFlags, SlashCommandBuilder, ChannelType } = require('discord.js');
 
 // Exportation du code
 module.exports = {
 
-    // Information n�cessaire � la commande
+    // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
             .setName('moveall')
@@ -27,12 +27,12 @@ module.exports = {
         // Si l'autheur n'est pas dans un salon vocal
         if(member.voice.channelId === null)
             await interaction.reply({
-                content: "You're not connected to a voice channel!`",
+                content: `❌ You're not connected to a voice channel!`,
                 flags: MessageFlags.Ephemeral
-            })
+            });
 
         // Récupéré la valeurs des options
-        const channelToMoveTo = interaction.options.getChannel('channel') ?? member.voice.channelId;
+        const channelToMoveTo = interaction.options.getChannel('channel') || member.voice.channelId;
         
         interaction.guild.channels.cache.filter(c => c.type === ChannelType.GuildVoice).forEach(async channel => {
             // Si il y a des gens dans tel salon
@@ -48,11 +48,11 @@ module.exports = {
                         {
                             // Changement de salon vocal
                             await member.voice.setChannel(channelToMoveTo);
-                            return interaction.reply(`Déplacé ${member.user.tag} vers ${channelToMoveTo}`);
+                            return interaction.reply(`✅ Sucess! ${user} has been moved to ${channelToMoveTo}!`);
                         } 
                         catch (error)
                         {
-                            console.error(`Erreur en déplaçant ${member.user.tag}:`, error);
+                            console.log(error);
                         }
                     }
                 }

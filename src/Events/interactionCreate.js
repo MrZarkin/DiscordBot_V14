@@ -5,14 +5,13 @@ const { Events, MessageFlags } = require('discord.js');
 module.exports = {
 	name: Events.InteractionCreate,
 
-	async execute(interaction) {
-        
+	async execute(interaction, bot) {
         // Si ce n'est pas une commade '/'
         if(!interaction.isChatInputCommand()) return;
 
         // Récupérer la commande du bot en fonction de ce qu'il écrit
         const command = interaction.client.commands.get(interaction.commandName);
-        
+
         if(!command)
         {
             console.error(`No command matching ${interaction.commandName} was found.`);
@@ -22,7 +21,8 @@ module.exports = {
         try 
         {
             // Essayer d'éxécuter le code que la commande doit faire
-            await command.execute(interaction);
+            await command.execute(interaction, bot, bot.db);
+            bot.commandsUsed++;
         } 
         catch(error) 
         {

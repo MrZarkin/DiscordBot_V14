@@ -32,22 +32,31 @@ module.exports = {
         // Récupéré la valeurs des options
         const user = interaction.options.getUser('user');
         const member = interaction.guild.members.cache.get(user.id);
-        const channelToMoveTo = interaction.options.getChannel('channel') ?? author.voice.channelId;
+        const channelToMoveTo = interaction.options.getChannel('channel') || author.voice.channelId;
 
         // Si l'auteur du message n'est pas dans un vocal
-        if(author.voice.channelId === null) 
-            return interaction.reply('You are not connected to a voice channel!');
+        if(author.voice.channelId === null)
+            await interaction.reply({
+                content: `❌ You're not connected to a voice channel!`,
+                flags: MessageFlags.Ephemeral
+            }); 
 
         // Si le membre n'est pas dans un salon vocal
         if(member.voice.channelId === null)
-            return interaction.reply('The member is not connected to a voice channel!');
+            await interaction.reply({
+                content: `❌ ${user} isn't connected to a voice channel!`,
+                flags: MessageFlags.Ephemeral
+            }); 
 
         // Si nous sommes dans le meme salon vocal que le membre ciblé
         if(member.voice.channelId === author.voice.channelId)
-            return interaction.reply('The member is already in your voice channel!');
+            await interaction.reply({
+                content: `❌ ${user} is already in your voice channel!`,
+                flags: MessageFlags.Ephemeral
+            }); 
 
         // Changement de salon vocal
         member.voice.setChannel(channelToMoveTo);
-        return interaction.reply(`${user.username} moved to ${author.voice.channel.name}`);
+        return interaction.reply(`✅ Sucess! ${user} has been moved to ${author.voice.channel}!`);
     }
 }
