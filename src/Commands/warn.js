@@ -1,6 +1,6 @@
 // Importation des librairies nécessaire
 const { PermissionFlagsBits, MessageFlags, SlashCommandBuilder, Colors } = require('discord.js');
-const createEmbed = require('../scripts/createEmbed');
+const createEmbed = require('../functions/createEmbed');
 
 // Exportation du code
 module.exports = {
@@ -8,21 +8,20 @@ module.exports = {
     // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
-            .setName('warn')
-            .setDescription('Warns a member.')
-            .addUserOption(option =>
-                option
-                    .setName('member')
-                    .setDescription('The user to warn.')
-                    .setRequired(true)
-                )
-            .addStringOption(option =>
-                option
-                    .setName('reason')
-                    .setDescription('Reason of the warn.')
-                    .setRequired(false)
-                )
-            .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
+        .setName('warn')
+        .setDescription('Warns a member.')
+        .addUserOption(option =>
+            option
+            .setName('member')
+            .setDescription('The user to warn.')
+            .setRequired(true)
+        )
+        .addStringOption(option =>
+            option
+            .setName('reason')
+            .setDescription('Reason of the warn.')
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
 
     async execute(interaction, bot, db)
     {

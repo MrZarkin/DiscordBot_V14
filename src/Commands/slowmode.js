@@ -8,36 +8,33 @@ module.exports = {
     // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
-            .setName('slowmode')
-            .setDescription('Enable/Disable slow mode.')
-            .addStringOption(option =>
-                option
-                    .setName('type')
-                    .setDescription('Type of actions.')
-                    .setRequired(true)
-                    .addChoices(
-                        { name: 'Enable', value: 'enable' },
-                        { name: 'Disable', value: 'disable' }
-                    )
+        .setName('slowmode')
+        .setDescription('Enable/Disable slow mode.')
+        .addStringOption(option =>
+            option
+            .setName('type')
+            .setDescription('Type of actions.')
+            .setRequired(true)
+            .addChoices(
+                { name: 'Enable', value: 'enable' },
+                { name: 'Disable', value: 'disable' }
             )
-            .addStringOption(option =>
-                option
-                    .setName('duration')
-                    .setDescription('The time to set for slowmode channel.')
-                    .setRequired(false)
-            )
-            .addChannelOption(option =>
-                option
-                    .setName('channel')
-                    .setDescription('The channel to enable/disable slowmode option.')
-                    .setRequired(false)
-            )
-            .addStringOption(option => 
-                option
-                    .setName('reason')
-                    .setDescription('The reason of the slowmode.')
-                    .setRequired(false)
-            ),
+        )
+        .addStringOption(option =>
+            option
+            .setName('duration')
+            .setDescription('The time to set for slowmode channel.')
+        )
+        .addChannelOption(option =>
+            option
+            .setName('channel')
+            .setDescription('The channel to enable/disable slowmode option.')
+        )
+        .addStringOption(option => 
+            option
+            .setName('reason')
+            .setDescription('The reason of the slowmode.')
+        ),
 
     async execute(interaction, bot, db)
     {

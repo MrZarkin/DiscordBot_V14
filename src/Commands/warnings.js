@@ -7,32 +7,32 @@ module.exports = {
     // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
-            .setName('warnings')
-            .setDescription('Manage members warnings.')
-            .addStringOption(option =>
-                option
-                    .setName('type')
-                    .setDescription('Type of actions.')
-                    .setRequired(true)
-                    .addChoices(
-                        { name: 'Clear', value: 'clear' },
-                        { name: 'List', value: 'list' },
-                        { name: 'Remove', value: 'remove' },
-                    )
+        .setName('warnings')
+        .setDescription('Manage members warnings.')
+        .addStringOption(option =>
+            option
+            .setName('type')
+            .setDescription('Type of actions.')
+            .setRequired(true)
+            .addChoices(
+                { name: 'Clear', value: 'clear' },
+                { name: 'List', value: 'list' },
+                { name: 'Remove', value: 'remove' },
             )
-            .addUserOption(option =>
-                option
-                    .setName('member')
-                    .setDescription('The user to get warings for.')
-                    .setRequired(false)
-                )
-            .addStringOption(option => 
-                option
-                    .setName('warn_id')
-                    .setDescription('The warns ID.')
-                    .setRequired(false)
-                )
-            .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
+        )
+        .addUserOption(option =>
+            option
+            .setName('member')
+            .setDescription('The user to get warings for.')
+            .setRequired(false)
+        )
+        .addStringOption(option => 
+            option
+            .setName('warn_id')
+            .setDescription('The warns ID.')
+            .setRequired(false)
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
 
     async execute(interaction, bot, db)
     {

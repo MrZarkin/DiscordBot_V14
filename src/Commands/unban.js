@@ -7,15 +7,15 @@ module.exports = {
     // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
-            .setName('unban')
-            .setDescription('Unbans a member.')
-            .addUserOption(option =>
-                option
-                    .setName('user')
-                    .setDescription('User to remove the ban of.')
-                    .setRequired(true)
-                )
-            .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
+        .setName('unban')
+        .setDescription('Unbans a member.')
+        .addUserOption(option =>
+            option
+            .setName('user')
+            .setDescription('User to remove the ban of.')
+            .setRequired(true)
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
 
     async execute(interaction)
     {

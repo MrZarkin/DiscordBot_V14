@@ -3,19 +3,18 @@
 </p>
 
 <p align="center">
-    <img src="https://img.shields.io/badge/Stable_Version-v1.1.5-2490D7.svg?style=for-the-badge" alt="Version"/>
+    <img src="https://img.shields.io/badge/Stable_Version-v1.1.6-2490D7.svg?style=for-the-badge" alt="Version"/>
     <a href="https://discord.com"><img src="https://img.shields.io/badge/Discord_Server-ADD-7289DA.svg?style=for-the-badge" alt="Discord"/></a>
     <a href=""><img src="https://img.shields.io/badge/LICENSE-GPL_2.0-43B02A.svg?style=for-the-badge" alt="License"/></a>
-    <img src="https://img.shields.io/badge/npm-v14.18.0-43B02A.svg?style=for-the-badge" alt="DiscordJS"/>
+    <img src="https://img.shields.io/badge/npm-v14.21.0-43B02A.svg?style=for-the-badge" alt="DiscordJS"/>
     <img src="https://img.shields.io/github/last-commit/MrZarkin/DiscordBot_V14?color=yellow&style=for-the-badge&logo=github" alt="GitHub"/>
     
 </p>
 
 ---
 
-## <img src="https://img.icons8.com/?size=100&id=85604&format=png&color=ff8000" width="23"> 》Notice
-
->The bot is currently in development, so it has no support server, and is not permanently active. This is just the beginning of an open source project (see license for details).
+> [!NOTE]
+> The bot is currently in development, so it has no support server, and is not permanently active. This is just the beginning of an open source project (see license for details).
 
 ## <img src="https://img.icons8.com/?size=100&id=83240&format=png&color=000000" width="23"> 》Features
 
@@ -33,8 +32,7 @@
 * `/unmute <type> <member>` -> The member to be unmuted.
 * `/warn <member> [reason]` -> Warns a member.
 * `/warnings <type> [member] [warnID]` -> Manage members warnings.
-* `/moveall [channel ?]` -> Move all members to the voice channel to which you are currently connected.
-* `/moveuser [user] {channel ?}` -> Moves a member to another voice channel.
+* `/move [user] [channel ?]` -> Move all members to the voice channel to which you are currently connected.
 * `/timeout <user> [time] [reason]` -> Timeout a user from sending messages, react or join voice channels.
 * `/untimeout <member>` -> Remove timeout from a user.
 
@@ -50,7 +48,12 @@
 
 ### Tickets
 
-> Incoming...
+* `/ticket` -> Manage the ticket system.
+    * `/ticket menu` -> Get access to the Ticket Setup Panel.
+    * `/ticket config` -> Change the settings of the Ticket System.
+    * `/ticket stats` -> Shows results of ticket system quality surveys.
+    * ... and a lot of action buttons!
+
 
 ### Leveling
 
@@ -77,6 +80,8 @@
 
 For a better understanding of the code, I recommend that you familiarize yourself with the Discord.js library on their [documentation](https://discord.js.org) and on their [guide](https://discordjs.guide/).
 
+> [!WARNING]
+> An important thing to remember. Some commands can't be executed unless the database is up and running.
 
 ### Setting Up
 
@@ -86,6 +91,7 @@ src/
 ├── Commands/
 ├── Events/
 ├── Loader/
+├── functions/
 ├── main.js
 └── config.json
 ```
@@ -100,7 +106,7 @@ Finally, you must put in this file :
 ```
 You will replace `TOKEN`, `CLIENTID`, `CLIENTID_SECRET` in your [Discord Developer Portal](https://discord.com/developers/applications). Choose any application if you have one, otherwise create one. Go to the Bot tab, and choose 'RESET TOKET'. Copy it and put it in `config.json`.
 
-2. Once finished, open a new terminal and type the command: `npm i discord.js`, `npm i @discordjs/rest`, then `npm i fs` and finally `npm i ms`.
+2. Once finished, open a new terminal and type the command: `npm i discord.js`, `npm i @discordjs/rest`, and all the libs said before.
 
 3. All that's left to do is launch the bot by typing `node start`. ( Make sure you've set the right path: `cd .\src\`.
  

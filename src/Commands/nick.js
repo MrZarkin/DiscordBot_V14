@@ -7,21 +7,21 @@ module.exports = {
     // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
-            .setName('nick')
-            .setDescription('Changes the nickname of a member.')
-            .addUserOption(option =>
-                option
-                    .setName('member')
-                    .setDescription('Member to set nick for.')
-                    .setRequired(true)
-                )
-            .addStringOption(option =>
-                option
-                    .setName('nickname')
-                    .setDescription('The new nickname.')
-                    .setRequired(false)
-                )
-            .setDefaultMemberPermissions(PermissionFlagsBits.ManageNicknames),
+        .setName('nick')
+        .setDescription('Changes the nickname of a member.')
+        .addUserOption(option =>
+            option
+            .setName('member')
+            .setDescription('Member to set nick for.')
+            .setRequired(true)
+        )
+        .addStringOption(option =>
+            option
+            .setName('nickname')
+            .setDescription('The new nickname.')
+            .setRequired(false)
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageNicknames),
 
     async execute(interaction)
     {

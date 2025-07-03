@@ -1,6 +1,6 @@
 // Importation des librairies nécessaire
 const { SlashCommandBuilder, Colors } = require('discord.js');
-const createEmbed = require('../scripts/createEmbed');
+const createEmbed = require('../functions/createEmbed');
 
 // Exportation du code
 module.exports = {
@@ -8,8 +8,8 @@ module.exports = {
     // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
-            .setName('ping')
-            .setDescription('Show the bot response time.'),
+        .setName('ping')
+        .setDescription('Show the bot response time.'),
 
     async execute(interaction)
     {

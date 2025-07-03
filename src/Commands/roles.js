@@ -1,6 +1,6 @@
 // Importation des éléments nécessaire
 const { SlashCommandBuilder, Colors } = require('discord.js');
-const createEmbed = require('../scripts/createEmbed');
+const createEmbed = require('../functions/createEmbed');
 
 // Exportation du code
 module.exports = {
@@ -8,8 +8,8 @@ module.exports = {
     // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
-            .setName('roles')
-            .setDescription('Get a list of server roles and member counts.'),
+        .setName('roles')
+        .setDescription('Get a list of server roles and member counts.'),
 
     async execute(interaction)
     {

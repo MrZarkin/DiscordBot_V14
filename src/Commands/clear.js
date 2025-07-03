@@ -7,17 +7,17 @@ module.exports = {
     // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
-            .setName('clear')
-            .setDescription('Cleans up channel messages.')
-            .addNumberOption(option =>
-                option
-                    .setName('amount')
-                    .setDescription('Number of messages to delete.')
-                    .setRequired(true)
-                    .setMinValue(1)
-                    .setMaxValue(100)
-                )
-            .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
+        .setName('clear')
+        .setDescription('Cleans up channel messages.')
+        .addNumberOption(option =>
+            option
+            .setName('amount')
+            .setDescription('Number of messages to delete.')
+            .setRequired(true)
+            .setMinValue(1)
+            .setMaxValue(100)
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages),
     
     async execute(interaction)
     {

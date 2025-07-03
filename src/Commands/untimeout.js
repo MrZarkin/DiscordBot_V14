@@ -7,15 +7,15 @@ module.exports = {
     // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
-            .setName('untimeout')
-            .setDescription('Remove timeout from a user.')
-            .addUserOption(option =>
-                option
-                    .setName('member')
-                    .setDescription('The user to untimeout')
-                    .setRequired(true)
-                )
-            .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
+        .setName('untimeout')
+        .setDescription('Remove timeout from a user.')
+        .addUserOption(option =>
+            option
+            .setName('member')
+            .setDescription('The user to untimeout')
+            .setRequired(true)
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
 
     async execute(interaction)
     {

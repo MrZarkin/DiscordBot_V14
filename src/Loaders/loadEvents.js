@@ -20,11 +20,11 @@ module.exports = async bot => {
         if(event.once) 
         {
             // Faire l'événement avec ses arguments et son code
-            bot.once(event.name, (...args) => event.execute(...args, bot));
+            bot.once(event.name, (...args) => event.execute(...args, bot, bot.db));
         }
         else
         {
-            bot.on(event.name, (...args) => event.execute(...args, bot));
+            bot.on(event.name, (...args) => event.execute(...args, bot, bot.db));
         }
     }
 }

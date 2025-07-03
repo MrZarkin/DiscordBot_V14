@@ -1,6 +1,6 @@
 // Importation des librairies nécessaire
 const { SlashCommandBuilder, Colors, ChannelType } = require('discord.js');
-const createEmbed = require('../scripts/createEmbed');
+const createEmbed = require('../functions/createEmbed');
 
 // Exportation du code
 module.exports = {
@@ -8,16 +8,16 @@ module.exports = {
     // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
-            .setName('channel')
-            .setDescription('Show informations about a channel.')
-            .addChannelOption(option =>
-                option
-                    .setName("channel")
-                    .setDescription("The channel to get informations.")
-                    .setRequired(false)
-                    .addChannelTypes(ChannelType.GuildText)
-                    .addChannelTypes(ChannelType.GuildVoice)
-            ),
+        .setName('channel')
+        .setDescription('Show informations about a channel.')
+        .addChannelOption(option =>
+            option
+            .setName("channel")
+            .setDescription("The channel to get informations.")
+            .setRequired(false)
+            .addChannelTypes(ChannelType.GuildText)
+            .addChannelTypes(ChannelType.GuildVoice)
+        ),
 
     async execute(interaction)
     {

@@ -1,7 +1,7 @@
 // Importation des éléments nécessaire
 const { PermissionFlagsBits, MessageFlags, SlashCommandBuilder } = require('discord.js');
 const ms = require('ms');
-const createEmbed = require('../scripts/createEmbed');
+const createEmbed = require('../functions/createEmbed');
 
 // Exportation du code
 module.exports = {
@@ -9,27 +9,25 @@ module.exports = {
     // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
-            .setName('timeout')
-            .setDescription('Timeout a user from sending messages, react or join voice channels.')
-            .addUserOption(option =>
-                option
-                    .setName('member')
-                    .setDescription('The user to timeout.')
-                    .setRequired(true)
-                )
-            .addStringOption(option =>
-                option
-                    .setName('duration')
-                    .setDescription('The duration of timeout.')
-                    .setRequired(false)
-                )
-            .addStringOption(option =>
-                option
-                    .setName('reason')
-                    .setDescription('The reason of timeout.')
-                    .setRequired(false)
-                )
-            .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
+        .setName('timeout')
+        .setDescription('Timeout a user from sending messages, react or join voice channels.')
+        .addUserOption(option =>
+            option
+            .setName('member')
+            .setDescription('The user to timeout.')
+            .setRequired(true)
+        )
+        .addStringOption(option =>
+            option
+            .setName('duration')
+            .setDescription('The duration of timeout.')
+        )
+        .addStringOption(option =>
+            option
+            .setName('reason')
+            .setDescription('The reason of timeout.')
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
 
     async execute(interaction)
     {

@@ -7,16 +7,16 @@ module.exports = {
     // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
-            .setName('unlock')
-            .setDescription('Unlock a channel from sending messages.')
-            .addChannelOption(option => 
-                option
-                    .setName('channel')
-                    .setDescription('Channel to unlock.')
-                    .setRequired(false)
-                    .addChannelTypes(ChannelType.GuildText)
-                )
-            .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
+        .setName('unlock')
+        .setDescription('Unlock a channel from sending messages.')
+        .addChannelOption(option => 
+            option
+            .setName('channel')
+            .setDescription('Channel to unlock.')
+            .setRequired(false)
+            .addChannelTypes(ChannelType.GuildText)
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
 
     async execute(interaction)
     {

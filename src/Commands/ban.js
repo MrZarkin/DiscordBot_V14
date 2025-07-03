@@ -1,6 +1,6 @@
 // Importation des librairies nécessaire
 const { PermissionFlagsBits, MessageFlags, SlashCommandBuilder, Colors } = require('discord.js');
-const createEmbed = require('../scripts/createEmbed');
+const createEmbed = require('../functions/createEmbed');
 const ms = require('ms');
 
 // Exportation du code
@@ -9,27 +9,27 @@ module.exports = {
     // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
-            .setName('ban')
-            .setDescription('Bans a member from the server.')
-            .addUserOption(option =>
-                option
-                    .setName('member')
-                    .setDescription('Member to ban.')
-                    .setRequired(true)
-                )
-            .addStringOption(option =>
-                option
-                    .setName('duration')
-                    .setDescription('Time duration for the ban. (Default: Permanent).')
-                    .setRequired(false)
-                )
-            .addStringOption(option =>
-                option
-                    .setName('reason')
-                    .setDescription('The reason of the ban.')
-                    .setRequired(false)
-                )
-            .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
+        .setName('ban')
+        .setDescription('Bans a member from the server.')
+        .addUserOption(option =>
+            option
+            .setName('member')
+            .setDescription('Member to ban.')
+            .setRequired(true)
+        )
+        .addStringOption(option =>
+            option
+            .setName('duration')
+            .setDescription('Time duration for the ban. (Default: Permanent).')
+            .setRequired(false)
+        )
+        .addStringOption(option =>
+            option
+            .setName('reason')
+            .setDescription('The reason of the ban.')
+            .setRequired(false)
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
 
     async execute(interaction)
     {

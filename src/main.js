@@ -18,7 +18,7 @@ loadSlashCommands(bot);
 loadEvents(bot);
 
 bot.function = {
-    createID: require('./scripts/createID')
+    createID: require('./functions/createID')
 }
 
 bot.commandsUsed = 0;

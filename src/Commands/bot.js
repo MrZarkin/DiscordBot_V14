@@ -1,7 +1,7 @@
 // Importation des librairies nécessaire
 const { SlashCommandBuilder, Colors, ActionRowBuilder, ButtonStyle } = require('discord.js');
-const createEmbed = require('../scripts/createEmbed');
-const createButton = require('../scripts/createButton');
+const createEmbed = require('../functions/createEmbed');
+const createButton = require('../functions/createButton');
 
 // Exportation du code
 module.exports = {
@@ -9,8 +9,8 @@ module.exports = {
     // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
-            .setName('bot')
-            .setDescription('Shows bot informations.'),
+        .setName('bot')
+        .setDescription('Shows bot informations.'),
 
     async execute(interaction, bot)
     {
@@ -65,7 +65,7 @@ module.exports = {
         });
 
         const comp = new ActionRowBuilder()
-            .addComponents(inviteButton, supportButton, webButton)
+        .addComponents(inviteButton, supportButton, webButton)
 
         // Envoie de l'embed et des boutons
         return interaction.reply({ 

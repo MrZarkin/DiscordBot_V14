@@ -18,6 +18,7 @@ const { EmbedBuilder } = require('discord.js');
 function createEmbed({
 
   title,
+  url,
   description,
   color = 0x2b2d31,
   footer,
@@ -31,6 +32,7 @@ function createEmbed({
   const embed = new EmbedBuilder();
 
   if (title) embed.setTitle(title);
+  if (url) embed.setURL(url);
   if (description) embed.setDescription(description);
   if (color) embed.setColor(color);
   if (footer) embed.setFooter(typeof footer === 'string' ? { text: footer } : footer);

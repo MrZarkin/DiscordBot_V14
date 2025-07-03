@@ -1,6 +1,6 @@
 // Importation des librairies nécessaire
 const { PermissionFlagsBits, MessageFlags, SlashCommandBuilder, ChannelType, Colors } = require('discord.js');
-const createEmbed = require('../scripts/createEmbed');
+const createEmbed = require('../functions/createEmbed');
 const ms = require('ms');
 
 // Exportation du code
@@ -9,47 +9,63 @@ module.exports = {
     // Information nécessaire à la commande
     data: 
         new SlashCommandBuilder()
-            .setName('mute')
-            .setDescription('The member to be muted.')
-            .addStringOption(option => 
-                option
-                    .setName('type')
-                    .setDescription('Type of mute.')
-                    .setRequired(true)
-                    .addChoices(
-                        { name: 'Text', value: 'text' },
-                        { name: 'Voice', value: 'voice' },
-                    )
-                )
-            .addUserOption(option =>
-                option
-                    .setName('member')
-                    .setDescription('Member to mute.')
-                    .setRequired(true)
-                )
-            .addStringOption(option =>
-                option
-                    .setName('time')
-                    .setDescription('Time duration for the mute.')
-                    .setRequired(false)
-                )
-            .addStringOption(option =>
-                option
-                    .setName('reason')
-                    .setDescription('Reason of the mute.')
-                    .setRequired(false)
-                )
-            .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
+        .setName('mute')
+        .setDescription('Mute a member (text or voice).')
+        .addSubcommand(command =>
+            command
+            .setName('text')
+            .setDescription('Mute a member from text.')
+            .addUserOption(options =>
+                options
+                .setName('member')
+                .setDescription('Member to mute.')
+                .setRequired(true)
+            )
+            .addStringOption(options =>
+                options
+                .setName('time')
+                .setDescription('Time duration for the mute.')
+            )
+            .addStringOption(options =>
+                options
+                .setName('reason')
+                .setDescription('Reason for the mute.')
+            )
+        )
+        .addSubcommand(command =>
+            command
+            .setName('voice')
+            .setDescription('Mute a member from voice.')
+            .addUserOption(options =>
+                options
+                .setName('member')
+                .setDescription('Member to mute.')
+                .setRequired(true)
+            )
+            .addStringOption(options =>
+                options
+                .setName('time')
+                .setDescription('Time duration for the mute.')
+            )
+            .addStringOption(options =>
+                options
+                .setName('reason')
+                .setDescription('Reason for the mute.')
+            )
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild),
 
     async execute(interaction)
     {
         // Récupérer la valeur des paramètres
-        const user = interaction.options.getUser("member");
+        const { options } = interaction;
+        const sub = options.getSubcommand();
+        const user = options.getUser("member");
         const member = interaction.guild.members.cache.get(user.id);
         const role = interaction.guild.roles.cache.find(role => role.name === "Muted");
-        const type = interaction.options.getString('type');
-        let time = interaction.options.getString("time");
-        let reason = interaction.options.getString("reason") || 'No reason provided';
+        const type = options.getString('type');
+        let time = options.getString("time");
+        let reason = options.getString("reason") || 'No reason provided';
 
         if(time != null && isNaN(ms(time)))
             // Si on convertie time en milliseconde et que c'est pas un nombre ...
@@ -75,49 +91,53 @@ module.exports = {
                 flags: MessageFlags.Ephemeral
             });
         }
-
-        // En fonction du type de mute
-        if(type === 'text')
+        
+        switch(sub)
         {
-            if(!role)
-            {
-                try
+            case 'text':
+                if(!role)
                 {
-                    // On créer un rôle 'Muted', aucune permissions activées
-                    let muterole = await interaction.guild.roles.create({
-                        name: 'Muted',
-                        permissions: []
-                    });
-                    
-                    // Pour chaque salon textuelles : Interdire l'envoie de message et d'ajouter des reactions pour le rôle 'Muted'
-                    interaction.guild.channels.cache.filter(c => c.type === ChannelType.GuildText).forEach( async channel => {
-                        await channel.permissionOverwrites.create(interaction.guild.roles.cache.find(role => role.name === "Muted"), {
-                            SendMessages: false,
-                            AddReactions: false
+                    try
+                    {
+                        // On créer un rôle 'Muted', aucune permissions activées
+                        let muterole = await interaction.guild.roles.create({
+                            name: 'Muted',
+                            permissions: []
                         });
+                        
+                        // Pour chaque salon textuelles : Interdire l'envoie de message et d'ajouter des reactions pour le rôle 'Muted'
+                        interaction.guild.channels.cache.filter(c => c.type === ChannelType.GuildText).forEach( async channel => {
+                            await channel.permissionOverwrites.create(interaction.guild.roles.cache.find(role => role.name === "Muted"), {
+                                SendMessages: false,
+                                AddReactions: false
+                            });
+                        });
+                    }
+                    catch(e)
+                    {
+                        console.log(e);
+                    }
+                }
+    
+                // Ajouter du rôle au membre
+                await member.roles.add(interaction.guild.roles.cache.find(role => role.name === "Muted"), reason);
+                break;
+
+            case 'voice':
+                if (member.voice.channelId === null) // Si le membre n'est pas dans un vocal
+                {
+                    return interaction.reply({
+                        content: `❌ **${user.displayName}** cannot be muted! He isn't in a voice channel!`,
+                        flags: MessageFlags.Ephemeral
                     });
                 }
-                catch(e)
-                {
-                    console.log(e);
-                }
-            }
+        
+                // Supprimer le mute en vocal de l'utilisateur 
+                await member.voice.setMute(true, reason);
+                break;
 
-            // Ajouter du rôle au membre
-            await member.roles.add(interaction.guild.roles.cache.find(role => role.name === "Muted"), reason);
-        }
-        else if(type === 'voice')
-        {
-            if (member.voice.channelId === null) // Si le membre n'est pas dans un vocal
-            {
-                return interaction.reply({
-                    content: `❌ **${user.displayName}** cannot be muted! He isn't in a voice channel!`,
-                    flags: MessageFlags.Ephemeral
-                });
-            }
-    
-            // Supprimer le mute en vocal de l'utilisateur 
-            await member.voice.setMute(true, reason);
+            default:
+                break;
         }
 
         let Embed;
